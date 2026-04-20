@@ -1,8 +1,7 @@
-- 👋 Hi, I’m @magnoxemo (Ebny Walid Ahammed)
-- 👀 I’m interested in computational physics,simulation,machine learning.
-- 📫 How to reach me ... if you have any suggestion or advises for me then please email me walid.ahammed01@gmail.com or eahammed@wisc.edu . I will really appreciate it 
+- 👋 Howdy! I’m magnoxemo (sometimes known as Walid)🇧🇩.
+- 🗣️ I love to yap about softwares, supercomputers, bikes and cats.
+- ⚛️ I am currently a doing my PhD in nuclear engineering at UW-Madison.
+- 📫 If you have any suggestions or advises for me then hit me up at walid.ahammed01@gmail.com or eahammed@wisc.edu
+ 
+ 
 
-<!---
-magnoxemo/magnoxemo is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
