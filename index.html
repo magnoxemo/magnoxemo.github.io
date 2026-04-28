@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ebny Walid Ahammed — Nuclear Engineering, Software, Supercomputers</title>
+<meta name="description" content="PhD student in Nuclear Engineering & Engineering Physics at the University of Wisconsin-Madison. Mesh tallies, Monte Carlo radiation transport, and the software that holds it all together." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+[lang="bn"] {
+  font-family:
+    "Bangla Sangam MN",
+    "Noto Sans Bengali",
+    "Galvji",
+    sans-serif;
+  font-size: 18px;
+  letter-spacing: -0.015em;
+  line-height: 1.65;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+  :root {
+    --bg:        #f3ede2;
+    --bg-deep:   #ebe3d4;
+    --surface:   #ffffff;
+    --ink:       #1a1714;
+    --ink-soft:  #4a423a;
+    --ink-mute:  #8a7f72;
+    --rule:      #d8cdb9;
+    --accent:    #b1471f;
+    --accent-2:  #2c4a3a;
+    --serif:     "Fraunces", "Cormorant Garamond", Georgia, serif;
+    --sans:      "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:      "JetBrains Mono", ui-monospace, Menlo, monospace;
+    --maxw:      1240px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 1;
+    background-image:
+      radial-gradient(rgba(60,40,20,.045) 1px, transparent 1px),
+      radial-gradient(rgba(60,40,20,.025) 1px, transparent 1px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 1px 1px;
+    mix-blend-mode: multiply;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 32px; position: relative; z-index: 2; }
+
+  /* ============ NAV ============ */
+  nav.top {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(14px) saturate(140%);
+    background: rgba(243,237,226,.78);
+    border-bottom: 1px solid var(--rule);
+  }
+  nav.top .row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 32px;
+    max-width: var(--maxw); margin: 0 auto;
+  }
+  .brand {
+    font-family: var(--mono);
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .brand .dot {
+    display:inline-block; width:7px; height:7px; border-radius:50%;
+    background: var(--accent); margin-right: 10px; vertical-align: middle;
+    transform: translateY(-1px);
+  }
+  nav.top ul {
+    display: flex; gap: 28px; list-style: none; padding: 0; margin: 0;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  }
+  nav.top a { color: var(--ink-soft); transition: color .2s; position: relative; padding: 4px 0; }
+  nav.top a::after {
+    content: ""; position: absolute; left: 0; bottom: -2px; height: 1px; width: 0;
+    background: var(--accent); transition: width .25s ease;
+  }
+  nav.top a:hover { color: var(--ink); }
+  nav.top a:hover::after { width: 100%; }
+
+  /* ============ HERO ============ */
+  header.hero {
+    padding: 100px 0 130px;
+    position: relative; overflow: hidden;
+  }
+  .meta-strip {
+    display: flex; justify-content: space-between; gap: 24px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--ink-mute);
+    padding-bottom: 60px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 60px;
+  }
+  .meta-strip span:nth-child(2) { text-align: center; }
+  .meta-strip span:last-child { text-align: right; }
+
+  h1.bigname {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-variation-settings: "SOFT" 50, "WONK" 1, "opsz" 144;
+    font-size: clamp(58px, 11.5vw, 192px);
+    line-height: .92;
+    letter-spacing: -0.04em;
+    margin: 0;
+    color: var(--ink);
+  }
+  h1.bigname em {
+    font-style: italic;
+    font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+    color: var(--accent);
+  }
+  .subtitle {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: end;
+  }
+  .role {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(20px, 2.4vw, 28px);
+    color: var(--ink-soft);
+    max-width: 720px;
+    line-height: 1.4;
+  }
+  .role .pill {
+    display: inline-block;
+    font-family: var(--mono); font-style: normal;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid var(--accent);
+    padding: 4px 10px; border-radius: 999px;
+    margin-right: 10px; vertical-align: middle;
+  }
+  .scroll-hint {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink-mute);
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    align-self: start;
+  }
+
+  /* ============ EPIGRAPH ============ */
+  .epigraph {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 80px 0;
+    text-align: center;
+    background: var(--bg-deep);
+    position: relative; z-index: 2;
+  }
+  .epigraph blockquote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-variation-settings: "SOFT" 100, "WONK" 1;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 0; padding: 0 32px;
+    max-width: 800px; margin: 0 auto;
+    letter-spacing: -0.01em;
+  }
+  .epigraph cite {
+    display: block;
+    margin-top: 24px;
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .epigraph cite::before { content: "— "; }
+
+  /* ============ SECTIONS ============ */
+  section {
+    padding: 120px 0;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    margin-bottom: 64px;
+    align-items: baseline;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .section-num::before { content: "§ "; }
+  .section-title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .section-title em {
+    font-style: italic;
+    font-variation-settings: "SOFT" 100;
+    color: var(--accent);
+  }
+
+  /* ============ ABOUT ============ */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .portrait { position: sticky; top: 100px; }
+  .portrait-frame {
+    aspect-ratio: 4/5;
+    background: var(--bg-deep);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 30px 60px -30px rgba(40,25,10,.35);
+  }
+  .portrait-frame img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    filter: contrast(1.02) saturate(.95);
+  }
+  .portrait-tag {
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--ink-mute);
+    display: flex; justify-content: space-between;
+  }
+  .bio p {
+    font-family: var(--serif);
+    font-size: 19px; line-height: 1.7;
+    color: var(--ink-soft);
+    margin: 0 0 22px;
+    font-weight: 350;
+  }
+  .bio p:first-child::first-letter {
+    font-family: var(--serif);
+    font-style: italic;
+    font-variation-settings: "SOFT" 100, "WONK" 1;
+    font-size: 5em;
+    float: left;
+    line-height: .82;
+    padding: 4px 12px 0 0;
+    color: var(--accent);
+  }
+  .bio a.inline { color: var(--accent); border-bottom: 1px solid var(--accent); }
+  .bio a.inline:hover { background: rgba(177,71,31,.08); }
+
+  .resume-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    padding: 14px 22px;
+    background: var(--ink); color: var(--bg);
+    border-radius: 2px;
+    margin-top: 16px;
+    transition: transform .2s ease, background .2s ease;
+  }
+  .resume-btn:hover { background: var(--accent); transform: translateY(-2px); }
+  .resume-btn .arrow { transition: transform .2s; }
+  .resume-btn:hover .arrow { transform: translateX(4px); }
+
+  .margins {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px dashed var(--rule);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .margins .label {
+    font-family: var(--mono);
+    font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .margins .item {
+    font-family: var(--serif);
+    font-size: 17px; font-style: italic;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  /* ============ PROJECTS ============ */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .project {
+    background: var(--bg);
+    padding: 40px;
+    transition: background .25s ease;
+    position: relative;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .project:hover { background: var(--surface); }
+  .project-logo {
+    width: 80px; height: 80px;
+    display: grid; place-items: center;
+    background: var(--bg-deep);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .project-logo svg { width: 44px; height: 44px; }
+  .project h3 {
+    font-family: var(--serif);
+    font-size: 28px; font-weight: 400;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .project h3 a {
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 95%;
+    transition: background-size .3s, color .2s;
+  }
+  .project h3 a:hover { background-size: 100% 1px; color: var(--accent); }
+  .project p {
+    font-size: 15px; color: var(--ink-soft);
+    margin: 0 0 16px; line-height: 1.55;
+  }
+  .project .meta {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-mute);
+    display: flex; gap: 18px; flex-wrap: wrap;
+  }
+  .project .meta span::before { content: "→ "; color: var(--accent); }
+
+  .more-link {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 40px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 4px;
+    transition: color .2s, border-color .2s;
+  }
+  .more-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ============ GALLERY ============ */
+  .gallery {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.2fr;
+    gap: 24px;
+    margin-top: 80px;
+  }
+  .gallery figure { margin: 0; }
+  .gallery .slide {
+    aspect-ratio: 4/3;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .gallery .slide svg { width: 100%; height: 100%; display: block; }
+  .gallery figcaption {
+    margin-top: 12px;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-mute);
+    display: flex; justify-content: space-between;
+  }
+  .gallery figcaption strong { color: var(--ink); font-weight: 500; }
+
+  /* ============ FOOTER ============ */
+  footer {
+    padding: 100px 0 50px;
+    background: var(--ink);
+    color: var(--bg);
+    position: relative; z-index: 2;
+  }
+  footer::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: var(--accent);
+  }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 80px;
+  }
+  .foot-grid h4 {
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 18px;
+    font-weight: 500;
+  }
+  .foot-grid .signature {
+    font-family: var(--serif);
+    font-style: italic;
+    font-variation-settings: "SOFT" 100, "WONK" 1;
+    font-size: 32px;
+    line-height: 1.2;
+    margin: 0 0 16px;
+    color: var(--bg);
+  }
+  .foot-grid p, .foot-grid a, .foot-grid li {
+    color: rgba(243,237,226,.7);
+    font-size: 14px; line-height: 1.7;
+  }
+  .foot-grid ul { list-style: none; padding: 0; margin: 0; }
+  .foot-grid a { transition: color .15s; }
+  .foot-grid a:hover { color: var(--bg); }
+
+  .copyright {
+    border-top: 1px solid rgba(243,237,226,.12);
+    padding-top: 30px;
+    display: flex; justify-content: space-between; gap: 20px;
+    font-family: var(--mono);
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: rgba(243,237,226,.45);
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .rise { opacity: 0; animation: rise .9s cubic-bezier(.2,.7,.2,1) forwards; }
+  .d1 { animation-delay: .1s; }
+  .d2 { animation-delay: .25s; }
+  .d3 { animation-delay: .4s; }
+  .d4 { animation-delay: .55s; }
+
+  @media (max-width: 900px) {
+    .wrap, nav.top .row { padding: 0 22px; }
+    nav.top ul { gap: 18px; }
+    .meta-strip { display: none; }
+    header.hero { padding: 70px 0 90px; }
+    .subtitle { grid-template-columns: 1fr; gap: 16px; }
+    .scroll-hint { display: none; }
+    .epigraph { padding: 60px 0; }
+    section { padding: 80px 0; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; margin-bottom: 40px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .portrait { position: static; max-width: 320px; }
+    .margins { grid-template-columns: 1fr 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project { grid-template-columns: 60px 1fr; padding: 28px; gap: 18px; }
+    .project-logo { width: 60px; height: 60px; }
+    .project-logo svg { width: 32px; height: 32px; }
+    .gallery { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 50px; }
+    .copyright { flex-direction: column; }
+  }
+</style>
+</head>
+
+<body>
+
+<nav class="top">
+  <div class="row">
+    <a href="#top" class="brand"><span class="dot"></span>E. W. Ahammed</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="meta-strip rise d1">
+      <span>Portfolio · Edition I</span>
+      <span>Madison, Wisconsin · 🇧🇩</span>
+      <span>Last Updated · April 2026</span>
+    </div>
+
+    <div class="gallery" style="grid-template-columns: 1fr;">
+  <figure>
+    <div class="slide">
+      <img src="ramers_cove.jpg" alt="Ramers Cove"
+           style="width: 100%; height: 100%; object-fit: cover; display: block;">
+    </div>
+    <figcaption>
+      <strong></strong>
+      <span style="font-size: 20px;" lang="bn">তোমার আকাশ ফুঁড়ে মেঘ ঝইড়া পড়ে। নতুন বৃষ্টির পানি পাইলে মাটি থাইকা যেমন একটা সুন্দর গন্ধ বাইর হয়,
+         আমার ও তোমার ভিজা কোঁকড়া চুল দেইখা সেইরকম সুখ লাগে। আইচ্ছা বৃষ্টিতে সবুজ রঙা শাড়ি পরা তোমার চোখের কাজল
+         ধুয়ে কি আরেকটা সোমেশ্বরী তৈরি হয়?</span>
+    </figcaption>
+  </figure>
+</div>
+
+    <h1 class="bigname rise d2">
+      Ebny Walid Ahammed<em>.</em>
+    </h1>
+
+    <div class="subtitle">
+      <p class="role rise d3">
+        <span class="pill">Currently</span>
+        PhD student in Nuclear Engineering &amp; Engineering Physics at the University of Wisconsin–Madison —
+        working on Monte Carlo radiation transport, mesh tallies, and the quiet software that holds it together.
+      </p>
+      <span class="scroll-hint rise d4">Scroll ↓</span>
+    </div>
+  </div>
+</header>
+
+<aside class="epigraph">
+  <blockquote>
+    You are not a drop in the ocean, you are the entire ocean in a drop
+    <cite>Jalal ad-Din Muhammad Rumi</cite>
+  </blockquote>
+</aside>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">01 / About</span>
+      <h2 class="section-title" >A few <em>notes</em><br>on who I am.</h2>
+    </div>
+
+    <div class="about-grid">
+      <aside class="portrait">
+        <div class="portrait-frame">
+          <img src="me_sunset.jpg"
+               alt="Portrait of Ebny Walid Ahammed">
+        </div>
+        <div class="portrait-tag">
+          <span style="font-size: 11px;" lang="bn"> মানুষ কখন ভাবে যে তার বয়স হইছে?
+             নদের পাঁড়ে বইসা চা খাইতে খাইতে দেখলেন কিছু বুঝার আগেই ডিঙ্গি আরেক পাঁড়ে। 
+             লেবু চা ফুঁড়ায়ে আসে। মনে হয় এই নতুন বানানো বেঞ্চি থেকে উইঠা যাওয়া লাগবে। বাদ গেলো আপনার এই বেলার গল্প। 
+            "আপনার এই গল্প তো শুনতেই হইছে অনেক বার। আর কতো একই আলাপ কইবেন?"
+            "আমি কি করবো? আইন্নেরে আমার গল্প শুনাইতে যে ভালো লাগে" </span>
+        </div>
+      </aside>
+
+      <div class="bio">
+        <p>
+          Howdy. I'm Walid — a PhD student at the
+          <a class="inline" href="https://www.wisc.edu" target="_blank" rel="noopener">University of Wisconsin–Madison</a>,
+          working in the Nuclear Engineering &amp; Engineering Physics department with the
+          <a class="inline" href="https://cnerg.github.io/" target="_blank" rel="noopener">Computational Nuclear Engineering Research Group (CNERG)</a>.
+          My research lives at the intersection of high-performance scientific computing,
+          computational geometry, and Monte Carlo radiation transport.
+        </p>
+        <p>
+          I grew up in Bangladesh and came to Madison for graduate school. Day to day I think
+          about mesh-based tallies, functional expansion methods, ray tracing for particle transport, hp adaptivity
+          and how to make any of these things run faster on a cluster than they did yesterday. I
+          contribute to projects like
+          <a class="inline" href="https://github.com/neams-th-coe/cardinal" target="_blank" rel="noopener">Cardinal</a>
+          and write smaller tools of my own when an idea wants a home.
+        </p>
+        <p>
+          Outside the lab, I bike — long, slow, in-no-particular-hurry kinds of rides. I keep
+          company with a couple of cats. And I read poetry, mostly the old stuff: Ghalib's
+          ghazals on long evenings, Rumi when the week has been heavier than usual. Software,
+          supercomputers, bikes, and cats — that's most of the list.
+        </p>
+
+        <a class="resume-btn" href="mailto:eahammed@wisc.edu">
+          Get in touch
+          <span class="arrow">→</span>
+        </a>
+
+        <div class="margins">
+          <div>
+            <div class="label">On the desk</div>
+            <div class="item">C++ &amp; Python</div>
+          </div>
+          <div>
+            <div class="label">On the road</div>
+            <div class="item">A bicycle, slowly</div>
+          </div>
+          <div>
+            <div class="label">On the shelf</div>
+            <div class="item">Ghalib · Rumi</div>
+          </div>
+          <div>
+            <div class="label">On the lap</div>
+            <div class="item">Two cats</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">02 / Work</span>
+      <h2 class="section-title">Software I'm <em>involved</em> in.</h2>
+    </div>
+
+    <div class="projects-grid">
+
+      <article class="project">
+        <div class="project-logo">
+          <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--accent)">
+            <circle cx="14" cy="14" r="3" fill="currentColor"/>
+            <circle cx="22" cy="11" r="3" fill="currentColor"/>
+            <circle cx="30" cy="14" r="3" fill="currentColor"/>
+            <circle cx="14" cy="30" r="3"/>
+            <circle cx="22" cy="33" r="3"/>
+            <circle cx="30" cy="30" r="3"/>
+            <path d="M 14 14 L 22 11 L 30 14"/>
+            <line x1="22" y1="11" x2="22" y2="33" stroke-dasharray="2 2"/>
+          </svg>
+        </div>
+        <div>
+          <h3><a href="https://github.com/magnoxemo/snitch" target="_blank" rel="noopener">snitch</a></h3>
+          <p>A mesh tally clustering program built on top of libMesh. Designed for grouping and analyzing tally data on unstructured meshes after a Monte Carlo run.</p>
+          <div class="meta"><span>C++</span><span>libMesh</span><span>Mesh Tallies</span></div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="project-logo">
+          <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--accent-2)">
+            <path d="M 4 14 Q 12 6, 22 14 T 40 14"/>
+            <path d="M 4 22 Q 9 14, 14 22 T 22 22 T 32 22 T 40 22"/>
+            <path d="M 4 30 Q 8 22, 12 30 T 20 30 T 28 30 T 36 30 T 40 30" opacity=".7"/>
+          </svg>
+        </div>
+        <div>
+          <h3><a href="https://github.com/magnoxemo/nonte-fonte" target="_blank" rel="noopener">nonte-fonte</a></h3>
+          <p>A small testbed for prototyping new functional expansion tally methods and basis function ideas without dragging an entire production code along for the ride.</p>
+          <div class="meta"><span>C++</span><span>FET</span><span>Research Tool</span></div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="project-logo">
+          <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--accent)">
+            <polygon points="22,4 38,12 38,30 22,40 6,30 6,12"/>
+            <line x1="6" y1="22" x2="38" y2="22" opacity=".4"/>
+            <line x1="22" y1="4" x2="22" y2="40" opacity=".4"/>
+            <line x1="2" y1="36" x2="42" y2="8" stroke-dasharray="3 2" stroke-width="1.6"/>
+          </svg>
+        </div>
+        <div>
+          <h3><a href="https://github.com/magnoxemo/sauron" target="_blank" rel="noopener">sauron</a></h3>
+          <p>A naïvely-implemented C++ library for neutron track-length calculation on unstructured meshes. Born inside a particle transport class and kept around because it turned out to be useful.</p>
+          <div class="meta"><span>C++</span><span>Track-Length</span><span>Unstructured Mesh</span></div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="project-logo">
+          <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--accent-2)">
+            <circle cx="22" cy="22" r="17"/>
+            <circle cx="22" cy="22" r="3" fill="currentColor"/>
+            <circle cx="14" cy="14" r="2.5"/>
+            <circle cx="30" cy="14" r="2.5"/>
+            <circle cx="14" cy="30" r="2.5"/>
+            <circle cx="30" cy="30" r="2.5"/>
+            <circle cx="22" cy="10" r="2.5"/>
+            <circle cx="22" cy="34" r="2.5"/>
+            <circle cx="10" cy="22" r="2.5"/>
+            <circle cx="34" cy="22" r="2.5"/>
+          </svg>
+        </div>
+        <div>
+          <h3><a href="https://github.com/magnoxemo/ASTARA" target="_blank" rel="noopener">ASTARA</a></h3>
+          <p>A kernel for a PCTRAN-style reactor simulator — dynamic, non-linear, and aimed squarely at the kinds of scenarios where the easy approximations stop being friendly.</p>
+          <div class="meta"><span>Python</span><span>Reactor Sim</span><span>Dynamics</span></div>
+        </div>
+      </article>
+
+    </div>
+
+    <a class="more-link" href="https://github.com/magnoxemo?tab=repositories" target="_blank" rel="noopener">
+      All 23 repositories on GitHub
+      <span>→</span>
+    </a>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Get in touch</h4>
+        <p class="signature">Let's talk.</p>
+        <p>Open to research collaborations, code reviews, bike route recommendations, and unsolicited Ghalib couplets.</p>
+      </div>
+
+      <div>
+        <h4>University</h4>
+        <p>
+          University of Wisconsin–Madison<br>
+          Engineering Physics Dept.<br>
+          Madison, WI 53706<br>
+          United States
+        </p>
+      </div>
+
+      <div>
+        <h4>Socialize</h4>
+        <ul>
+          <li><a href="https://github.com/magnoxemo" target="_blank" rel="noopener">GitHub →</a></li>
+          <li><a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn →</a></li>
+          <li><a href="https://github.com/cnerg" target="_blank" rel="noopener">CNERG →</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Direct</h4>
+        <ul>
+          <li><a href="mailto:eahammed@wisc.edu">eahammed@wisc.edu</a></li>
+          <li><a href="mailto:walid.ahammed01@gmail.com">walid.ahammed01@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="copyright">
+      <span>© 2026 Ebny Walid Ahammed. Built in Madison.</span>
+      <span>magnoxemo · Edition I</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
